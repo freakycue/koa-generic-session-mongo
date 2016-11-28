@@ -192,7 +192,7 @@ var MongoStore = (function (_EventEmitter) {
       return _regeneratorRuntime.wrap(function set$(context$2$0) {
         while (1) switch (context$2$0.prev = context$2$0.next) {
           case 0:
-            maxAge = sess.cookie.maxAge || sess.cookie.maxage;
+            maxAge = sess.cookie ? (sess.cookie.maxAge || sess.cookie.maxage) : undefined;
             context$2$0.next = 3;
             return this.col;
 

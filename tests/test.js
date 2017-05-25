@@ -119,3 +119,37 @@ describe('url info exclusive', function () {
     assert.throw(() => {new MongoStore({url: 'mongodb://127.0.0.1:27017', ssl: true})});
   });
 });
+
+/*
+// These have been commented out since I don't know of a good way to have them run as part
+// of the normal build/test cycle. They require running mongoDB in preferSSL mode with the
+// CA and PEM file from the certs directory. Running in requireSSL mode would cause the
+// tests above to fail.
+import fs from 'fs';
+import {join} from 'path';
+
+describe('custom ssl', function() {
+  let db;
+  const certPath = join(__dirname, 'certs');
+  const sslCA = fs.readFileSync(join(certPath, 'ca.crt')).toString();
+  const sslCert = fs.readFileSync(join(certPath, 'localhost.crt')).toString();
+  const sslKey = fs.readFileSync(join(certPath, 'localhost.key')).toString();
+
+  describe('provide db connection', function() {
+    before(function *() {
+      db = yield thunkify(MongoClient.connect)('mongodb://localhost:27017/test?ssl=true', {sslCA, sslCert, sslKey});
+    });
+
+    describeStore('options: {db}', () => {return {db}}, {cleanDb: true});
+  });
+
+  describeStore('config options', {
+    url: 'mongodb://localhost:27017/test?ssl=true',
+    driverOptions: {
+      sslCA,
+      sslCert,
+      sslKey,
+    },
+  }, {cleanDb: true});
+});
+*/

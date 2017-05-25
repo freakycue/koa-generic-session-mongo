@@ -29,7 +29,8 @@ export default class MongoStore extends EventEmitter {
       collection,
       url,
       user,
-      password
+      password,
+      driverOptions
     } = options;
 
     if (url && ('host' in options || 'port' in options || 'db' in options || 'ssl' in options)) {
@@ -42,7 +43,8 @@ export default class MongoStore extends EventEmitter {
         url: url || MongoStore._makeConnectionString(options),
         user,
         password,
-        collection
+        collection,
+        driverOptions
       });
 
     this.col
@@ -74,9 +76,9 @@ export default class MongoStore extends EventEmitter {
    * @returns {Promise}
    * @private
    */
-  _initWithUrl({url, user, password, collection=DEFAULT_COLLECTION}) {
+  _initWithUrl({url, user, password, collection=DEFAULT_COLLECTION, driverOptions={}}) {
     return new Promise((resolve, reject) => {
-      new MongoClient().connect(url, function (err, db) {
+      new MongoClient().connect(url, driverOptions, function (err, db) {
         if (err) {
           reject(err);
           return;

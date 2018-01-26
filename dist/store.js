@@ -65,6 +65,7 @@ var MongoStore = (function (_EventEmitter) {
     var url = options.url;
     var user = options.user;
     var password = options.password;
+    var driverOptions = options.driverOptions;
 
     if (url && ('host' in options || 'port' in options || 'db' in options || 'ssl' in options)) {
       throw new Error('url option is exclusive from host, port, db and ssl options, please include as a full url connection string');
@@ -74,7 +75,8 @@ var MongoStore = (function (_EventEmitter) {
       url: url || MongoStore._makeConnectionString(options),
       user: user,
       password: password,
-      collection: collection
+      collection: collection,
+      driverOptions: driverOptions
     });
 
     this.col.then(MongoStore._ensureIndexes).then(function (collection) {
@@ -119,9 +121,11 @@ var MongoStore = (function (_EventEmitter) {
       var password = _ref2.password;
       var _ref2$collection = _ref2.collection;
       var collection = _ref2$collection === undefined ? DEFAULT_COLLECTION : _ref2$collection;
+      var _ref2$driverOptions = _ref2.driverOptions;
+      var driverOptions = _ref2$driverOptions === undefined ? {} : _ref2$driverOptions;
 
       return new _Promise(function (resolve, reject) {
-        new _mongodb.MongoClient().connect(url, function (err, db) {
+        new _mongodb.MongoClient().connect(url, driverOptions, function (err, db) {
           if (err) {
             reject(err);
             return;
